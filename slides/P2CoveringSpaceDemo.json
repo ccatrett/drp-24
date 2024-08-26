@@ -1,0 +1,19 @@
+{
+  "slides": [
+    {
+      "loop": false,
+      "auto_next": false,
+      "playback_rate": 1.0,
+      "reversed_playback_rate": 1.0,
+      "notes": "",
+      "dedent_notes": true,
+      "file": "slides/files/P2CoveringSpaceDemo/018c484c62a2abd93d7cae386571bb673384a21cb2fd9b0e53852dc4d8ffe969.mp4",
+      "rev_file": "slides/files/P2CoveringSpaceDemo/018c484c62a2abd93d7cae386571bb673384a21cb2fd9b0e53852dc4d8ffe969_reversed.mp4"
+    }
+  ],
+  "resolution": [
+    1920,
+    1080
+  ],
+  "background_color": "black"
+}

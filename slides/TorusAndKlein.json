@@ -1,0 +1,19 @@
+{
+  "slides": [
+    {
+      "loop": false,
+      "auto_next": false,
+      "playback_rate": 1.0,
+      "reversed_playback_rate": 1.0,
+      "notes": "",
+      "dedent_notes": true,
+      "file": "slides/files/TorusAndKlein/2dcf508ac9a6c0a23fd979a89f3cfdbd152d068129b78c27b18b23eef5c8d4ac.mp4",
+      "rev_file": "slides/files/TorusAndKlein/2dcf508ac9a6c0a23fd979a89f3cfdbd152d068129b78c27b18b23eef5c8d4ac_reversed.mp4"
+    }
+  ],
+  "resolution": [
+    1920,
+    1080
+  ],
+  "background_color": "black"
+}

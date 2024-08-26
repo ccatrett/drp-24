@@ -1,0 +1,19 @@
+{
+  "slides": [
+    {
+      "loop": false,
+      "auto_next": false,
+      "playback_rate": 1.0,
+      "reversed_playback_rate": 1.0,
+      "notes": "",
+      "dedent_notes": true,
+      "file": "slides/files/P1PathHomtopyDef/0ea7a8e6c1fd2a0d857f303aeec06ed74e3ee32a3ab460e4f2d132b12757f8b4.mp4",
+      "rev_file": "slides/files/P1PathHomtopyDef/0ea7a8e6c1fd2a0d857f303aeec06ed74e3ee32a3ab460e4f2d132b12757f8b4_reversed.mp4"
+    }
+  ],
+  "resolution": [
+    1920,
+    1080
+  ],
+  "background_color": "black"
+}

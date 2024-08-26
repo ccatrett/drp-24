@@ -1,0 +1,6 @@
+# This file is used internally by FFMPEG.
+file 'file:/home/ccatrett/drp/24/pres/media/videos/pres/1080p60/partial_movie_files/IntroCoveringSpaces/3803692056_472891391_1546107441.mp4'
+file 'file:/home/ccatrett/drp/24/pres/media/videos/pres/1080p60/partial_movie_files/IntroCoveringSpaces/496046558_2776702091_1546107441.mp4'
+file 'file:/home/ccatrett/drp/24/pres/media/videos/pres/1080p60/partial_movie_files/IntroCoveringSpaces/496046558_1420700393_334198327.mp4'
+file 'file:/home/ccatrett/drp/24/pres/media/videos/pres/1080p60/partial_movie_files/IntroCoveringSpaces/496046558_2555026708_1404695499.mp4'
+file 'file:/home/ccatrett/drp/24/pres/media/videos/pres/1080p60/partial_movie_files/IntroCoveringSpaces/496046558_3467822883_3332783058.mp4'

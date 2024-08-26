@@ -1,0 +1,8 @@
+# This file is used internally by FFMPEG.
+file 'file:/home/ccatrett/drp/24/pres/media/videos/pres/1080p60/partial_movie_files/PartOneIntro/3950283264_3467822883_4166999565.mp4'
+file 'file:/home/ccatrett/drp/24/pres/media/videos/pres/1080p60/partial_movie_files/PartOneIntro/4050668098_2474576980_1600321249.mp4'
+file 'file:/home/ccatrett/drp/24/pres/media/videos/pres/1080p60/partial_movie_files/PartOneIntro/4050668098_3467822883_20192178.mp4'
+file 'file:/home/ccatrett/drp/24/pres/media/videos/pres/1080p60/partial_movie_files/PartOneIntro/4050668098_2831656063_681647862.mp4'
+file 'file:/home/ccatrett/drp/24/pres/media/videos/pres/1080p60/partial_movie_files/PartOneIntro/4050668098_3467822883_3785374637.mp4'
+file 'file:/home/ccatrett/drp/24/pres/media/videos/pres/1080p60/partial_movie_files/PartOneIntro/4050668098_2747623301_3318370913.mp4'
+file 'file:/home/ccatrett/drp/24/pres/media/videos/pres/1080p60/partial_movie_files/PartOneIntro/4050668098_3467822883_2034774878.mp4'

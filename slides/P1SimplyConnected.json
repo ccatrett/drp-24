@@ -1,0 +1,19 @@
+{
+  "slides": [
+    {
+      "loop": false,
+      "auto_next": false,
+      "playback_rate": 1.0,
+      "reversed_playback_rate": 1.0,
+      "notes": "",
+      "dedent_notes": true,
+      "file": "slides/files/P1SimplyConnected/7387fe7c3b7bc816afd9e566f6c3861f5e4a87e4ccf2cbfb754650aeffd9e964.mp4",
+      "rev_file": "slides/files/P1SimplyConnected/7387fe7c3b7bc816afd9e566f6c3861f5e4a87e4ccf2cbfb754650aeffd9e964_reversed.mp4"
+    }
+  ],
+  "resolution": [
+    1920,
+    1080
+  ],
+  "background_color": "black"
+}

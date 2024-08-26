@@ -1,0 +1,19 @@
+{
+  "slides": [
+    {
+      "loop": false,
+      "auto_next": false,
+      "playback_rate": 1.0,
+      "reversed_playback_rate": 1.0,
+      "notes": "",
+      "dedent_notes": true,
+      "file": "slides/files/IntroLoops/f09cb4c967844cca386f809edff522dd28693ffc063185d9eff1e5bc05e62c1b.mp4",
+      "rev_file": "slides/files/IntroLoops/f09cb4c967844cca386f809edff522dd28693ffc063185d9eff1e5bc05e62c1b_reversed.mp4"
+    }
+  ],
+  "resolution": [
+    1920,
+    1080
+  ],
+  "background_color": "black"
+}
