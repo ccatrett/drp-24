@@ -1,6 +1,5 @@
 from manim import *
 from manim_slides import Slide, ThreeDSlide
-#from manim-tikz import Tikz
 import numpy as np
 from scipy.interpolate import CubicSpline
 
@@ -729,22 +728,179 @@ class P2CoveringSpaceDemo(ThreeDSlide):
 
 class P2Lift(Slide):
     def construct(self):
+        latex_temp = TexTemplate()
+        latex_temp.add_to_preamble(r"\usepackage{tikz-cd}")
+        latex_temp.add_to_preamble(r"\usepackage{quiver}")
+
         d = Tex(r"\textsc{Definition}").to_edge(UL).scale(0.75)
         d_box = SurroundingRectangle(d, color=WHITE, buff=0.2)
 
-        lift = Tex(r"Given maps $f : X \to Z$ and $g : Y \to Z$, a map $h : X \to Y$ is called a lift if $f = h\circ g$").scale(0.75).to_edge(UP).shift(DOWN)
+        lift = Tex(r"Given maps $f : X \to Z$ and $g : Y \to Z$, a map $h : X \to Y$ is called a \textbf{\textit{lift}} of $f$ if $f = g\circ h$, and we say that $f$ factors through $g$ (by $h$)").scale(0.75).to_edge(UP).shift(DOWN)
 
-        diagram = Tex(r""" \begin{tikzcd}
-                    & Y \\
-                    X & Z
-                    \arrow["g", from=1-2, to=2-2]
-                    \arrow["h", from=2-1, to=1-2]
-                    \arrow["f"', from=2-1, to=2-2]
-                    \end{tikzcd}""").move_to(ORIGIN)
+        diagram = Tex(r"""
+            \begin{tikzcd}[ampersand replacement=\&]
+	            \& Y \\
+	            X \& Z
+	            \arrow["g", from=1-2, to=2-2]
+	            \arrow["h", from=2-1, to=1-2]
+	            \arrow["f"', from=2-1, to=2-2]
+            \end{tikzcd}""",
+                      tex_template=latex_temp).move_to(ORIGIN).set_stroke(width=1).scale(0.75)
 
 
         self.play(FadeIn(VGroup(d,d_box)))
+        self.wait()
+
+        self.play(FadeIn(lift))
+        self.wait()
+
         self.play(FadeIn(diagram))
+        self.wait()
+
+
+class P2EvenlyCoveredDef(Slide):
+    def construct(self):
+        d = Tex(r"\textsc{Definition}").to_edge(UL).scale(0.75)
+        def_box = SurroundingRectangle(d, color=WHITE, buff=0.2)
+
+        evenly_covered = Tex(r"An open subset $U$ of a space $X$ is \textbf{\textit{evenly covered}} by a map $p : \widetilde{X} \to X$ if $p^{-1}(U) = \bigsqcup_{\alpha}V_{\alpha}$ is the disjoint union of open sets $V_{\alpha}$ which project homeomorphically onto $U$ $$p\circ\iota_{\alpha}  :V_{\alpha}\to U$$")
+        evenly_covered.scale(0.75).to_edge(UP).shift(DOWN)
+
+        self.play(FadeIn(VGroup(d,def_box)))
+        self.wait()
+
+        self.play(FadeIn(evenly_covered))
+        self.wait()
+
+
+
+class P2EvenlyCoveredVisual(ThreeDSlide):
+    def construct(self):
+        # set up for blob
+        points = [[0,1,0], [-0.75,0.5,0], [-1,0,0], [-1,-0.5,0], [-0.33,-0.7,0],
+                  [0,-0.8,0], [0.28,-0.73,0],
+                  [0.71,0.25,0], [1,0.5,0], [0,1,0]]
+        # Extract the x and y coordinates from the points
+        x_coords = [point[0] for point in points]
+        y_coords = [point[1] for point in points]
+
+        # Create a cubic spline interpolator for x and y with periodic boundary conditions
+        spline_x = CubicSpline(range(len(x_coords)), x_coords, bc_type='periodic')
+        spline_y = CubicSpline(range(len(y_coords)), y_coords, bc_type='periodic')
+
+        # blob function
+        def func(t):
+            return np.array([spline_x(t), spline_y(t), 0])
+
+        # create the vertices for the blob using the parametric function
+        vertices = [func(t) for t in np.linspace(0, len(points) - 1, 100)]
+
+        # Create the filled blob
+        blob = VMobject()
+        blob.set_points_as_corners(vertices + [vertices[0]])  # Ensure it's a closed shape
+        blob.set_fill(color=BLUE, opacity=0.5)  # Set fill color and opacity
+        blob.set_stroke(color=WHITE, width=2)  # Optional: set stroke color and width
+
+        base_blob = blob.copy().move_to(ORIGIN).shift(OUT * -2.65)
+
+        # create pancake stacks
+        num_stacks = 6
+        stacks = VGroup()
+        for i in range(num_stacks):
+            stack = blob.copy()
+            stack.shift(OUT * i * 0.67)
+            stacks.add(stack)
+
+        # Top space
+        top_space = Ellipse(width = 7, height = 6, color = BLACK).move_to(ORIGIN).shift(OUT * -2.65).set_fill(WHITE, opacity = 0.7)
+        label_X = MathTex("X").move_to(top_space.get_corner(UL)). rotate(angle=PI/4, axis=RIGHT)
+
+        # TeX
+        down_arrow = Tex(r"$\downarrow$").scale(2).rotate(angle = PI / 2, axis = RIGHT).rotate(angle = 0, axis = OUT).shift(IN)
+        p = MathTex("p").move_to(down_arrow.get_left()).rotate(angle=PI/4, axis=RIGHT).shift(0.5 * LEFT)
+
+        stacks_label = MathTex("p^{-1}(U)").move_to(stacks[num_stacks - 1].get_corner(UL)).rotate(angle=PI/4, axis=RIGHT).shift(1.5 * LEFT)
+
+        # Animations
+        self.set_camera_orientation(phi=75 * DEGREES, theta=-90 * DEGREES)
+        self.play(*[FadeIn(stack) for stack in stacks])
+        self.play(FadeIn(VGroup(top_space, label_X)), FadeIn(base_blob), lag_ratio = 0)
+        self.play(FadeIn(VGroup(p,down_arrow)), FadeIn(stacks_label))
+        self.wait()
+
+class P2CoveringSpaceDef(Slide):
+    def construct(self):
+        d = Tex(r"\textsc{Definition}").to_edge(UL).scale(0.75)
+        def_box = SurroundingRectangle(d, color=WHITE, buff=0.2)
+
+        covering_space = Tex(r"Given a space $X$, a \textbf{\textit{covering space}} of $X$ is a space $\widetilde{X}$ with a map $p : \widetilde{X}\to X$ such that each point of $X$ has an evenly covered neighborhood by $p$")
+        covering_space.scale(0.75).to_edge(UP).shift(DOWN)
+
+        self.play(FadeIn(VGroup(d,def_box)))
+        self.wait()
+
+        self.play(FadeIn(covering_space))
+        self.wait()
+
+class P2HLPDef(Slide):
+    def construct(self):
+        latex_temp = TexTemplate()
+        latex_temp.add_to_preamble(r"\usepackage{tikz-cd}")
+        latex_temp.add_to_preamble(r"\usepackage{quiver}")
+
+        d = Tex(r"\textsc{Definition}").to_edge(UL).scale(0.75)
+        d_box = SurroundingRectangle(d, color=WHITE, buff=0.2)
+
+        hlp = Tex(r"""
+                    Given a covering space $p : \widetilde{X}\to X$, a homotopy $h_t : Y \to X$, and a map
+                    $\widetilde{h}_0 : Y\to \widetilde{X}$ lifting $f_0$, then there exists a unique homotopy
+                    $\widetilde{h}_t : Y \to \widetilde{X}$ of $\widetilde{h}_0$ that lifts $h_t$."""
+                  ).scale(0.75).to_edge(UP).shift(DOWN)
+
+        diagram = Tex(r"""
+                        \begin{tikzcd}[ampersand replacement=\&]
+                            Y \&\& {\widetilde{X}} \\
+                            {Y \times I} \&\& X
+                            \arrow["{\widetilde{h}_0}", from=1-1, to=1-3]
+                            \arrow["{\iota_0}"', hook, from=1-1, to=2-1]
+                            \arrow["p", from=1-3, to=2-3]
+                            \arrow["{\exists!\widetilde{h}_t}", dashed, from=2-1, to=1-3]
+                            \arrow["{h_t}", from=2-1, to=2-3]
+                        \end{tikzcd}""",
+                      tex_template=latex_temp).move_to(ORIGIN).set_stroke(width=1).shift(DOWN)
+
+        self.play(FadeIn(VGroup(d,d_box)))
+        self.wait()
+
+        self.play(FadeIn(hlp))
+        self.wait()
+
+        self.play(FadeIn(diagram))
+        self.wait()
+
+class P2RCoversS1(ThreeDSlide):
+    def construct(self):
+        def helix_func(t):
+            return np.array([np.cos(4 * t), np.sin(4 * t), t])
+        helix = ParametricFunction(helix_func, t_range=(0, 2 * PI),stroke_width=2)
+        cylinder = Cylinder(radius=1, height=2 * PI).set_opacity(0.3).move_to(helix.get_center())
+
+        circle = Circle(radius=1).move_to(cylinder.get_center()).shift(5 * IN)
+
+        vdots_1 = MathTex(r"\vdots")
+        vdots_2 = MathTex(r"\vdots")
+
+        #TODO: Place vdots above and below cylinder
+
+        self.set_camera_orientation(phi=75*DEGREES, theta=0*DEGREES, zoom=0.75)
+        self.play(Create(circle))
+        self.play(Create(cylinder), run_time=5)
+        self.play(Create(helix), run_time=10, rate_func=linear)
+
+
+
+
+
 
 
 
