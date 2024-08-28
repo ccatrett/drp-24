@@ -11,7 +11,7 @@ class IntroText(Slide):
             '   fight for the soul of every individual discipline of mathematics.\"').scale(0.5)
         HWQ.to_edge(UP)
 
-        HW = Paragraph("- Herman Weyl", alignment="center", color=YELLOW).scale(0.75)
+        HW = Paragraph("- Hermann Weyl", alignment="center", color=YELLOW).scale(0.75)
         HW.shift(UP * 2)
 
         self.play(FadeIn(HWQ, run_time = 3))
@@ -95,22 +95,22 @@ class IntroLoops(Slide):
         base.move_to(5 * LEFT)
 
         # Animations
-        self.play(FadeIn(c), run_time=4, rate_func=linear)
+        self.play(FadeIn(c), run_time=2, rate_func=linear)
         self.wait()
 
         self.play(FadeIn(base))
         self.wait()
 
-        self.play(Create(loop_1), run_time=3, rate_func=linear)
+        self.play(Create(loop_1), run_time=1, rate_func=linear)
         self.wait()
 
-        self.play(Create(loop_2), run_time=4, rate_func=linear)
+        self.play(Create(loop_2), run_time=3, rate_func=linear)
         self.wait()
 
-        self.play(Uncreate(loop_2), run_time=4, rate_func=linear)
+        self.play(Uncreate(loop_2), run_time=3, rate_func=linear)
         self.wait()
 
-        self.play(Uncreate(loop_1), run_time=3, rate_func=linear)
+        self.play(Uncreate(loop_1), run_time=1, rate_func=linear)
         self.wait()
 
 
@@ -231,9 +231,17 @@ class P1HomotopyDef(Slide):
                  r"$h_t : X \to Y$ indexed by $t \in I$ which is continuous in the sense that the associated function $H : X \times I \to Y$ given by $H(x,t) = h_t(x)$ is continuous.")
         homotopy.scale(0.7).shift(1.5 * UP)
 
+        big_disk_X = Circle(radius=2, color=WHITE, fill_opacity=1).shift(2 * DOWN + 3.25 * LEFT)
+        small_disk_X = Circle(radius=1, color=BLACK, fill_opacity=1).shift(2 * DOWN + 3.25 * LEFT)
 
-        space_X = SVGMobject("./svgs/genus_2.svg").scale(1.75).shift(2 * DOWN + 3.25 * LEFT).set_stroke(color=WHITE, width=2)
-        space_Y = SVGMobject("./svgs/4_wedge_sum.svg").scale(1.5).shift(2 * DOWN + 3.25 * RIGHT).set_stroke(color=WHITE, width=2)
+        R = ValueTracker(2)
+        r = ValueTracker(1)
+
+        big_disk_Y = always_redraw(lambda: Circle(radius=R.get_value(), color=WHITE, fill_opacity=1).shift(2 * DOWN + 3.25 * RIGHT))
+        small_disk_Y = always_redraw(lambda: Circle(radius=r.get_value(), color=BLACK, fill_opacity=1).shift(2 * DOWN + 3.25 * RIGHT))
+
+        space_X = VGroup(big_disk_X, small_disk_X)#SVGMobject("./svgs/genus_2.svg").scale(1.75).shift(2 * DOWN + 3.25 * LEFT).set_stroke(color=WHITE, width=2)
+        space_Y = VGroup(big_disk_Y, small_disk_Y)#Circle(radius=1.5, color=WHITE).shift(2 * DOWN + 3.25 * RIGHT)#SVGMobject("./svgs/4_wedge_sum.svg").scale(1.5).shift(2 * DOWN + 3.25 * RIGHT).set_stroke(color=WHITE, width=2)
 
         label_X = MathTex("X").move_to(space_X.get_top()).shift(0.5 * UP)
         label_Y = MathTex("Y").move_to(space_Y.get_top()).shift(0.5 * UP)
@@ -243,17 +251,31 @@ class P1HomotopyDef(Slide):
 
         arrow = Line(start=space_X.get_right(), end=space_Y.get_left(), buff=0.75).add_tip()
 
-        label_ht = Tex(r"$h_t$").move_to(arrow.get_top()).shift(0.2 * UP)
+        t = ValueTracker(0)
+
+        # Define the updater function
+        def update_label_ht(mobject):
+            # Update the Tex object with the current value from the ValueTracker
+            new_subscript = f"{{{t.get_value():.2f}}}"
+            mobject.become(Tex(f"$h_{new_subscript}$"))
+            mobject.move_to(ORIGIN).shift(0.2 * UP)  # Adjust position if needed
+
+        label_ht = Tex(r"$h_{}$").move_to(arrow.get_top()).shift(0.2 * UP)
+
+        label_ht.add_updater(update_label_ht)
 
         self.play(FadeIn(VGroup(d, d_box)))
 
         self.play(FadeIn(homotopy))
+        self.wait(10)
 
         self.play(FadeIn(labels))
         self.play(DrawBorderThenFill(spaces))
 
         self.play(Create(arrow), FadeIn(label_ht), lag_ratio=0)
-        self.wait()
+        self.wait(5)
+
+        self.play(AnimationGroup(t.animate.set_value(1), R.animate.set_value(1.525), r.animate.set_value(1.475)), run_time=5, rate_func=linear, lag_ratio=0)
 
 class P1HomotopicDef(Slide):
     def construct(self):
@@ -302,10 +324,10 @@ class P1HomotopicDef(Slide):
         self.add(VGroup(d,d_box))
 
         self.play(FadeIn(homotopic))
-        self.wait()
+        self.wait(18)
 
         self.play(Create(curves), run_time=3)
-        self.wait(3)
+        self.wait()
 
         self.play(Transform(curve2, curve1, rate_func=linear, run_time=5))
         self.wait()
@@ -341,25 +363,41 @@ class P1HomotopyEquivalenceDef(Slide):
 
         self.add(VGroup(d,d_box))
         self.play(FadeIn(homEq))
-        self.wait()
+
+        self.wait(2)
+
         self.play(FadeIn(domain))
+
+        self.wait(0.5)
+
         self.play(FadeIn(codomain))
+
+        self.wait(1.5)
+
         self.play(FadeIn(arrowGroup_f))
+
+        self.wait()
+
         self.play(FadeIn(arrowGroup_g), FadeIn(center))
 
-        group3 = VGroup(label_X, arrowGroup_f, arrowGroup_g, codomain)
-        self.play(FadeOut(group3))
 
+
+        self.play(FadeOut(Group(label_X, arrowGroup_f, arrowGroup_g, codomain)))
+
+        self.wait(5)
         self.play(a.animate.set_value(0))
 
+        self.wait(10)
         self.play(r.animate.set_value(0.05))
+
+        self.wait(10)
         self.play(r.animate.set_value(1.2))
-        self.play(r.animate.set_value(0.05))
+        #self.play(r.animate.set_value(0.05))
         self.wait()
 
 
 #TODO: Fix timing
-class P1PathHomtopyDef(Slide):
+class P1PathHomotopyDef(Slide):
     def construct(self):
         blob = SVGMobject("./svgs/blob.svg").set_stroke(color=WHITE, width=4).scale(2.75).to_edge(DOWN)
 
@@ -389,6 +427,8 @@ class P1PathHomtopyDef(Slide):
         h_1 = MathTex(r"h_1", r"\, : I \to X").to_corner(UR)
         h_1[0].set_color(BLUE)
 
+        h_t = MathTex(r"h_t : I \to X").to_edge(UP)
+
         self.play(Create(blob), run_time=2)
         self.play(FadeIn(VGroup(x_0,x_1, label_0, label_1)))
 
@@ -402,9 +442,11 @@ class P1PathHomtopyDef(Slide):
         self.play(Create(line, run_time=2))
         self.wait()
 
+        self.play(FadeIn(h_t))
+
         self.play(Homotopy(linear_homotopy, curve, run_time=3.5))
 
-class P1HomtopyEquivalenceRelation(Slide):
+class P1HomotopyEquivalenceRelation(Slide):
     def construct(self):
         lemma = Tex(r"\textsc{Lemma}").to_edge(UL).scale(0.75)
         lemma_box = SurroundingRectangle(lemma, color=WHITE, buff=0.2)
@@ -459,25 +501,24 @@ class P1Concatenation(Slide):
         self.wait()
 
         self.play(FadeIn(concatenation_def))
-        self.wait()
+        self.wait(10)
 
         self.play(FadeIn(function))
-        self.wait()
+        self.wait(3)
 
         self.play(FadeIn(concatenation))
-        self.wait()
+        self.wait(15)
 
-        self.play(Create(VGroup(curve_1, curve_2)))
-        self.wait()
+        self.play(Create(VGroup(curve_1, curve_2), run_time=4, rate_func=linear))
 
         self.play(FadeIn(common))
-        self.wait()
+        self.wait(2)
 
         # Move the point along curve_1
-        self.play(MoveAlongPath(point, curve_1))
+        self.play(MoveAlongPath(point, curve_1, run_time=1, rate_func=linear))
 
         # Move the point along curve_2
-        self.play(MoveAlongPath(point, curve_2))
+        self.play(MoveAlongPath(point, curve_2, run_time=1, rate_func=linear))
         self.wait()
 
 #TODO: Fix timing and add bit about identity element, inverse elements
@@ -497,7 +538,7 @@ class P1FundamentalGroup(Slide):
         self.play(FadeIn(VGroup(d,def_box)))
 
         self.play(FadeIn(loop))
-        self.wait()
+        self.wait(5)
 
         self.play(FadeIn(VGroup(def_fg, fg, operation)))
         self.wait()
@@ -554,22 +595,29 @@ class P1FundamentalGroupBasePoint(Slide):
         point = Dot(radius=0.1, color=PURPLE).move_to(x_1.get_x() * RIGHT + x_1.get_y() * UP)
 
         self.play(FadeIn(question))
-        self.wait()
+        self.wait(10)
         self.play(FadeOut(question))
 
         self.play(FadeIn(VGroup(lemma, lemma_box)))
 
         self.play(FadeIn(l))
-        self.wait()
+        self.wait(8)
 
         self.play(FadeIn(blob))
         self.play(FadeIn(VGroup(x_0, label_0, x_1, label_1)))
+        self.wait()
 
         self.play(Create(curve_0))
+        self.wait()
+
         self.play(Create(curve_1))
+        self.wait()
+
         self.play(MoveAlongPath(point, curve_1))
         self.play(MoveAlongPath(point, curve_0))
         self.play(MoveAlongPath(point, curve_1), rate_func=lambda t: 1-t)
+        self.play(FadeOut(point), run_time=0.1)
+        self.wait()
 
 # Repeat of P1HomotopyIntro
 class P1HomotopyPreservesHoles(ThreeDSlide):
@@ -645,12 +693,12 @@ class P1SimplyConnected(Slide):
         pseudo_circle = SVGMobject("./svgs/pseudocircle.svg").set_stroke(color=WHITE).set_fill(color=WHITE).scale(2).shift(1.75 * DOWN)
 
         self.play(FadeIn(VGroup(d,def_box)))
-        self.wait(10)
-
-        self.play(FadeIn(simply_connected))
         self.wait()
 
-        self.play(Create(pseudo_circle), run_time=3)
+        self.play(FadeIn(simply_connected))
+        self.wait(10)
+
+        self.play(Create(pseudo_circle, run_time=3, rate_func=linear))
         self.wait()
 
 ################# PART 2: Fundamental Group of the Circle
@@ -853,7 +901,7 @@ class P2HLPDef(Slide):
 
         hlp = Tex(r"""
                     Given a covering space $p : \widetilde{X}\to X$, a homotopy $h_t : Y \to X$, and a map
-                    $\widetilde{h}_0 : Y\to \widetilde{X}$ lifting $f_0$, then there exists a unique homotopy
+                    $\widetilde{h}_0 : Y\to \widetilde{X}$ lifting $h_0$, then there exists a unique homotopy
                     $\widetilde{h}_t : Y \to \widetilde{X}$ of $\widetilde{h}_0$ that lifts $h_t$."""
                   ).scale(0.75).to_edge(UP).shift(DOWN)
 
@@ -879,23 +927,147 @@ class P2HLPDef(Slide):
         self.wait()
 
 class P2RCoversS1(ThreeDSlide):
+    #TODO: Fix all of the open intervals
     def construct(self):
         def helix_func(t):
             return np.array([np.cos(4 * t), np.sin(4 * t), t])
-        helix = ParametricFunction(helix_func, t_range=(0, 2 * PI),stroke_width=2)
-        cylinder = Cylinder(radius=1, height=2 * PI).set_opacity(0.3).move_to(helix.get_center())
+        a = 4
+        offset = PI / (4 * a)
+        helix_0 = ParametricFunction(helix_func, t_range=(0, offset), color=RED)
+        helix_1 = ParametricFunction(helix_func, t_range=(offset, PI/2 - offset), color=WHITE)
+        helix_2 = ParametricFunction(helix_func, t_range=(PI/2 - offset, PI/2 + offset), color=PURPLE)
+        helix_3 = ParametricFunction(helix_func, t_range=(PI/2 + offset, PI - offset), color=WHITE)
+        helix_4 = ParametricFunction(helix_func, t_range=(PI - offset, PI + offset), color=PINK)
+        helix_5 = ParametricFunction(helix_func, t_range=(PI + offset, (3/2) * PI - offset), color=WHITE)
+        helix_6 = ParametricFunction(helix_func, t_range=((3/2) * PI - offset, (3/2) * PI + offset), color=YELLOW)
+        helix_7 = ParametricFunction(helix_func, t_range=((3/2) * PI + offset, 2 * PI - offset), color=WHITE)
+        helix_8 = ParametricFunction(helix_func, t_range=(2 * PI - offset, 2 * PI + offset), color=GREEN_A)
+        helix_9 = ParametricFunction(helix_func, t_range=(2* PI + offset, (5/2) * PI), color=WHITE)
 
-        circle = Circle(radius=1).move_to(cylinder.get_center()).shift(5 * IN)
+        num_helices = 9
 
-        vdots_1 = MathTex(r"\vdots")
-        vdots_2 = MathTex(r"\vdots")
 
-        #TODO: Place vdots above and below cylinder
 
-        self.set_camera_orientation(phi=75*DEGREES, theta=0*DEGREES, zoom=0.75)
-        self.play(Create(circle))
-        self.play(Create(cylinder), run_time=5)
-        self.play(Create(helix), run_time=10, rate_func=linear)
+        hg = VGroup(helix_0, helix_1, helix_2, helix_3, helix_4, helix_5, helix_6, helix_7, helix_8, helix_9)
+
+        #def helix(n, color_):
+            #return ParametricFunction(helix_func, t_range=(2 * n * PI / a, 2 * (n + 1) * PI / a), stroke_width=2, color=color_)
+        #helix_0 = helix(0, RED)
+        #helix_1 = helix(1, GREEN_A)
+        #helix_2 = helix(2, YELLOW)
+        #helix_3 = helix(3, WHITE)
+
+        #hg = VGroup(helix_0, helix_1, helix_2, helix_3)
+
+        cylinder = Cylinder(radius=1, height=2 * PI).set_opacity(0.3).move_to(ORIGIN + PI * OUT)
+
+        def circle_func(t):
+            return np.array([np.sin(2 * PI * t), np.cos(2 * PI * t), -6])
+
+        circle_blue = ParametricFunction(circle_func, t_range=(0,1/2), color=BLUE)
+        circle_white = ParametricFunction(circle_func, t_range=(1/2,1), color=WHITE)
+
+        vdots_1 = MathTex(r"\vdots").scale(2).move_to(cylinder.get_center()).shift(4.5 * IN).rotate(angle=PI/2, axis=RIGHT)
+
+        v_n1 = MathTex(r"-1")
+        v_0 = MathTex(r"0")
+        v_1 = MathTex(r"1")
+        v_2 = MathTex(r"2")
+        v_3 = MathTex(r"3")
+
+        v = VGroup(v_n1, v_0, v_1, v_2, v_3)
+
+        p = MathTex(r"""
+            p :\,& \mathbb{R}\to S^1\\
+            & s \mapsto (\cos(2\pi s), \sin(2\pi s))
+        """).move_to(4 * OUT + 5 * LEFT + 2 * DOWN).rotate(angle=PI/2, axis=RIGHT).scale(0.75).set_stroke(width=1.2)
+
+        self.set_camera_orientation(phi=75*DEGREES, theta=-90*DEGREES, zoom=0.5)
+        self.play(Create(circle_blue), Create(circle_white), FadeIn(Dot3D(radius=0.1).move_to(RIGHT + 6 * IN)))
+        self.play(Create(cylinder), run_time=2)
+
+
+        for i in range(5):
+            self.play(FadeIn(Dot3D(radius=0.1).move_to(RIGHT + (2 * i * PI / a) * OUT)))
+            self.play(FadeIn(v[i].move_to(1.5 * RIGHT + (2 * i * PI / a) * OUT).rotate(angle=PI/2, axis=RIGHT).scale(0.75)))
+
+        for i in range(num_helices):
+            self.play(Create(hg[i]), rate_func=linear)
+
+        self.play(FadeIn(p))
+        self.play(FadeIn(vdots_1))
+
+
+class P2S1LoopsLiftUpToR(ThreeDSlide):
+    def construct(self):
+        latex_temp = TexTemplate()
+        latex_temp.add_to_preamble(r"\usepackage{tikz-cd}")
+        latex_temp.add_to_preamble(r"\usepackage{quiver}")
+
+        omega_n = MathTex(r"""
+            \omega_n :\,& I \to \mathbb{R}\\
+            & s\mapsto (\cos(2\pi n s), \sin(2\pi n s))
+        """).move_to(5 * OUT + 5 * LEFT + 4 * DOWN).rotate(angle=PI/2, axis=RIGHT).set_stroke(width=1.2)
+
+        omega_n_lift = MathTex(r"""
+            \tilde{\omega}_n :\,& I \to \mathbb{R}\\
+            & s \mapsto sn
+        """).move_to(7 * LEFT + 4 * DOWN).rotate(angle=PI/2, axis=RIGHT).set_stroke(width=1.2)
+
+
+        diagram = MathTex(r"""
+            \begin{tikzcd}[ampersand replacement=\&]
+                \& {\mathbb{R}} \\
+                I \& {S^1}
+                \arrow["p", from=1-2, to=2-2]
+                \arrow["\widetilde{\omega}_n", from=2-1, to=1-2]
+                \arrow["\omega_n"', from=2-1, to=2-2]
+            \end{tikzcd}
+        """, tex_template=latex_temp).move_to(-4 * OUT + 7 * LEFT + 4 * DOWN).rotate(angle=90 * DEGREES, axis=RIGHT).set_stroke(width=1.2)
+
+        a = 3
+        s = ValueTracker(0)
+        h = ValueTracker(-6)
+
+        def helix_func(t):
+            return np.array([np.cos(a * t), np.sin(a * t), t * s.get_value() + h.get_value()])
+
+        helix = always_redraw(lambda: ParametricFunction(helix_func, t_range=(0, 2 * PI), color=WHITE))
+
+        circle = Circle(radius=1, color=WHITE).shift(6 * IN)
+
+
+        cylinder = Cylinder(radius=1, height=2 * PI).set_opacity(0.3).move_to(ORIGIN + PI * OUT)
+
+        dot = Dot3D(radius=0.1, color=RED).move_to(6 * IN + RIGHT)
+
+        self.set_camera_orientation(phi=75*DEGREES, theta=-90*DEGREES, zoom=0.5)
+
+        self.play(Create(circle), FadeIn(dot))
+        self.wait()
+
+        for i in range(3):
+            self.play(MoveAlongPath(dot, circle, rate_func=linear, run_time=1.5))
+
+
+        self.play(Create(cylinder))
+
+        self.add(helix)
+
+        self.play(FadeIn(omega_n))
+        self.wait(3)
+
+        self.play(FadeIn(omega_n_lift))
+        self.wait(3)
+
+        self.play(FadeIn(diagram))
+        self.wait(3)
+
+        self.play(s.animate.set_value(1))
+        self.play(h.animate.set_value(0))
+
+
+
 
 
 

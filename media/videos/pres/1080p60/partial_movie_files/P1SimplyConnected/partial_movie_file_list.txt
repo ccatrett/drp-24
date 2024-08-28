@@ -2,6 +2,6 @@
 file 'file:/home/ccatrett/drp/24/pres/media/videos/pres/1080p60/partial_movie_files/P1SimplyConnected/3977891868_1304909254_223132457.mp4'
 file 'file:/home/ccatrett/drp/24/pres/media/videos/pres/1080p60/partial_movie_files/P1SimplyConnected/2852726489_1733944848_1935928487.mp4'
 file 'file:/home/ccatrett/drp/24/pres/media/videos/pres/1080p60/partial_movie_files/P1SimplyConnected/2852726489_1816296360_3107309541.mp4'
-file 'file:/home/ccatrett/drp/24/pres/media/videos/pres/1080p60/partial_movie_files/P1SimplyConnected/2852726489_1733944848_582355447.mp4'
-file 'file:/home/ccatrett/drp/24/pres/media/videos/pres/1080p60/partial_movie_files/P1SimplyConnected/2852726489_2399741379_4182923351.mp4'
+file 'file:/home/ccatrett/drp/24/pres/media/videos/pres/1080p60/partial_movie_files/P1SimplyConnected/2852726489_2923979111_582355447.mp4'
+file 'file:/home/ccatrett/drp/24/pres/media/videos/pres/1080p60/partial_movie_files/P1SimplyConnected/2852726489_1808806268_4182923351.mp4'
 file 'file:/home/ccatrett/drp/24/pres/media/videos/pres/1080p60/partial_movie_files/P1SimplyConnected/2852726489_1733944848_2422322867.mp4'
